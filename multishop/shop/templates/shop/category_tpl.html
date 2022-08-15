@@ -1,0 +1,8 @@
+<div class="navbar-nav w-100">
+    <div class="{{ menu_class }}">
+        {% for item in categories %}
+        <a href="{{ item.get_absolute_url }}" class="nav-item nav-link">{{ item.name }}</a>
+        {% endfor %}
+    </div>
+
+</div>
