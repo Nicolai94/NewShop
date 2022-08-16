@@ -13,5 +13,6 @@ class OrderAdmin(admin.ModelAdmin):
                     'created', 'updated']
     list_filter = ['paid', 'created', 'updated']
     inlines = [OrderItemInline]
+    save_on_top = True
 
 admin.site.register(Order, OrderAdmin)
