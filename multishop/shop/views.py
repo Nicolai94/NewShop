@@ -76,7 +76,7 @@ def product_detail(request, slug):
                   {'product': product, 'cart_product_form': cart_product_form})
 
 
-def post_detail(request, year, month, day, prod):
+def detail(request, year, month, day, prod):
     product = get_object_or_404(Product, slug=prod,
                                    status='published',
                                    publish__year=year,
