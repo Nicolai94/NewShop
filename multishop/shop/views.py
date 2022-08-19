@@ -1,14 +1,17 @@
 from django.contrib import messages
+from django.contrib.auth import login, logout
+from django.core.mail import send_mail
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
+from django.views import View
 from django.views.generic import ListView, DetailView
 from django.contrib.auth.forms import UserCreationForm
 from .models import Product, Category
 from cart.forms import CartAddProductForm
+from .forms import UserLoginForm, ContactForm, CommentForm
 
-from .forms import UserLoginForm
 
-
-def login(request):
+def user_login(request):
     if request.method == 'POST':
         form = UserLoginForm(data=request.POST)
         if form.is_valid():
@@ -18,6 +21,11 @@ def login(request):
     else:
         form = UserLoginForm()
     return render(request, 'shop/login.html', {'form': form})
+
+
+def user_logout(request):
+    logout(request)
+    return redirect('login')
 
 
 def register(request):
@@ -61,14 +69,52 @@ class ProductByCategory(ListView):
         return context
 
 
-class GetProduct(DetailView):
-    model = Product
-    template_name = 'shop/detail.html'
-    context_object_name = 'product'
+def product_detail(request, slug):
+    product = get_object_or_404(Product, slug=slug, available=True)
+    cart_product_form = CartAddProductForm()
+    return render(request, 'shop/detail.html',
+                  {'product': product, 'cart_product_form': cart_product_form})
 
+
+def post_detail(request, year, month, day, prod):
+    product = get_object_or_404(Product, slug=prod,
+                                   status='published',
+                                   publish__year=year,
+                                   publish__month=month,
+                                   publish__day=day)
+    comments = product.comments.filter(active=True)
+
+    if request.method == 'POST':
+        comment_form = CommentForm(data=request.POST)
+        if comment_form.is_valid():
+            new_comment = comment_form.save(commit=False)
+            new_comment.product = product
+            new_comment.save()
+    else:
+        comment_form = CommentForm()
+    return render(request,
+                  'shop/detail.html',
+                 {'product': product,
+                  'comments': comments,
+                  'comment_form': comment_form})
 
 def contact(request):
-    return render(request, 'shop/contact.html')
+    if request.method == 'POST':
+        form = ContactForm(data=request.POST)
+        if form.is_valid():
+            mail = send_mail(form.cleaned_data['subject'], form.cleaned_data['content'], ' ',
+                             [' '], fail_silently=True)
+            if mail:
+                messages.success(request, 'Письмо отправлено')
+                return redirect('contact')
+            else:
+                messages.error(request, 'Ошибка отправки')
+        else:
+            messages.error(request, 'Ошибка валидации')
+    else:
+        form = ContactForm()
+    context = {'form': form}
+    return render(request, 'shop/contact.html', context)
 
 
 class Search(ListView):
@@ -101,12 +147,4 @@ class ShopList(ListView):
 
 def about(request):
     return render(request, 'shop/about.html')
-
-
-def product_detail(request, id_prod):
-    product = get_object_or_404(Product, id=id_prod,   available=True)
-    cart_product_form = CartAddProductForm()
-    return render(request, 'shop/detail.html',
-                  {'product': product, 'cart_product_form': cart_product_form})
-
 

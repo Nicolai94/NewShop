@@ -20,7 +20,7 @@
                             <div class="p-3" style="max-width: 700px;">
                                 <h1 class="display-4 text-white mb-3 animate__animated animate__fadeInDown">Notebooks for work</h1>
                                 <p class="mx-md-5 px-5 animate__animated animate__bounceIn">Some notebooks for you</p>
-                                <a class="btn btn-outline-light py-2 px-4 mt-3 animate__animated animate__fadeInUp" href="">Shop Now</a>
+                                <a class="btn btn-outline-light py-2 px-4 mt-3 animate__animated animate__fadeInUp" href="{% url 'shop_list' %}">Shop Now</a>
                             </div>
                         </div>
                     </div>
@@ -30,7 +30,7 @@
                             <div class="p-3" style="max-width: 700px;">
                                 <h1 class="display-4 text-white mb-3 animate__animated animate__fadeInDown">Smartphone for life</h1>
                                 <p class="mx-md-5 px-5 animate__animated animate__bounceIn">Some smartphone for your life</p>
-                                <a class="btn btn-outline-light py-2 px-4 mt-3 animate__animated animate__fadeInUp" href="#">Shop Now</a>
+                                <a class="btn btn-outline-light py-2 px-4 mt-3 animate__animated animate__fadeInUp" href="{% url 'shop_list' %}">Shop Now</a>
                             </div>
                         </div>
                     </div>
@@ -40,7 +40,7 @@
                             <div class="p-3" style="max-width: 700px;">
                                 <h1 class="display-4 text-white mb-3 animate__animated animate__fadeInDown">TV</h1>
                                 <p class="mx-md-5 px-5 animate__animated animate__bounceIn">Some for your relax</p>
-                                <a class="btn btn-outline-light py-2 px-4 mt-3 animate__animated animate__fadeInUp" href="#">Shop Now</a>
+                                <a class="btn btn-outline-light py-2 px-4 mt-3 animate__animated animate__fadeInUp" href="{% url 'shop_list' %}">Shop Now</a>
                             </div>
                         </div>
                     </div>
@@ -104,8 +104,6 @@
         {% show_menu1 %}
 </div>
 <!-- Categories End -->
-
-
 <!-- Products Start -->
 <div class="container-fluid pt-5 pb-3">
     <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Featured Products</span></h2>
@@ -115,29 +113,15 @@
             <div class="product-item bg-light mb-4">
                 <div class="product-img position-relative overflow-hidden">
                     {% if item.photo %}
-                    <img class="img-fluid w-50" src="{{ item.photo.url }}" alt="{{ item.name }}">
+                    <img width="250" height="150" src="{{ item.photo.url }}" alt="{{ item.name }}">
                     {% else %}
                     <img class="img-fluid w-100" src="https://thumbs.dreamstime.com/b/no-image-available-icon-photo-camera-flat-vector-illustration-132483141.jpg" alt="" >
                     {% endif %}
-                    <div class="product-action">
-                        <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
-                        <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
-                        <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
-                        <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
-                    </div>
                 </div>
                 <div class="text-center py-4">
                     <a class="h6 text-decoration-none text-truncate" href="{{ item.get_absolute_url }}">{{ item.name }}</a>
                     <div class="d-flex align-items-center justify-content-center mt-2">
-                        <h5>${{ item.price }}</h5><h6 class="text-muted ml-2"><p>({{ item.stock }})</p></h6>
-                    </div>
-                    <div class="d-flex align-items-center justify-content-center mb-1">
-                        <small class="fa fa-star text-primary mr-1"></small>
-                        <small class="fa fa-star text-primary mr-1"></small>
-                        <small class="fa fa-star text-primary mr-1"></small>
-                        <small class="fa fa-star text-primary mr-1"></small>
-                        <small class="fa fa-star text-primary mr-1"></small>
-                        <small>(99)</small>
+                        <h5>${{ item.price }}</h5><h6 class="text-muted ml-2"><p>(Amount: {{ item.stock }})</p></h6>
                     </div>
                 </div>
             </div>

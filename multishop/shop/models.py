@@ -41,19 +41,21 @@ class Product(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('detail', kwargs={'slug': self.slug})
+        return reverse('product_detail', kwargs={'slug': self.slug})
 
 
-class Reviews(models.Model):
+class Comment(models.Model):
+    prod = models.ForeignKey(Product, related_name='comments', on_delete=models.CASCADE)
+    name = models.CharField(max_length=80)
     email = models.EmailField()
-    name = models.CharField(max_length=100, verbose_name='Имя')
-    text = models.TextField(max_length=5000, verbose_name='Описание')
-    parent = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True, verbose_name='родитель')
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Товар')
-
-    def __str__(self):
-        return f'{self.name} - {self.product}'
+    body = models.TextField()
+    created = models.DateTimeField(auto_now_add=True)
+    active = models.BooleanField(default=True)
 
     class Meta:
-        verbose_name = 'Отзыв'
-        verbose_name_plural = 'Отзывы'
+        ordering = ('created',)
+
+    def __str__(self):
+        return 'Comment by {} on {}'.format(self.name, self.post)
+
+

@@ -102,9 +102,9 @@
                     <div class="tab-pane fade" id="tab-pane-3">
                         <div class="row">
                             <div class="col-md-6">
-                                <h4 class="mb-4">1 review for "Product Name"</h4>
+                                <h4 class="mb-4">1 review for "{{ product.name }}"</h4>
                                 <div class="media mb-4">
-                                    <img src="img/user.jpg" alt="Image" class="img-fluid mr-3 mt-1" style="width: 45px;">
+                                    <img src="{% static 'img/user.jpg' %}" alt="Image" class="img-fluid mr-3 mt-1" style="width: 45px;">
                                     <div class="media-body">
                                         <h6>John Doe<small> - <i>01 Jan 2045</i></small></h6>
                                         <div class="text-primary mb-2">
@@ -121,33 +121,33 @@
                             <div class="col-md-6">
                                 <h4 class="mb-4">Leave a review</h4>
                                 <small>Your email address will not be published. Required fields are marked *</small>
-                                <div class="d-flex my-3">
-                                    <p class="mb-0 mr-2">Your Rating * :</p>
-                                    <div class="text-primary">
-                                        <i class="far fa-star"></i>
-                                        <i class="far fa-star"></i>
-                                        <i class="far fa-star"></i>
-                                        <i class="far fa-star"></i>
-                                        <i class="far fa-star"></i>
+                                <br></br>
+                                {% with comments.count as total_comments %}
+                                    <h2>
+                                        {{ total_comments }} comment{{ total_comments|pluralize }}
+                                    </h2>
+                                {% endwith %}
+                                {% for comment in comments %}
+                                    <div class="comment">
+                                        <p class="info">
+                                            Comment {{ forloop.counter }} by {{ comment.name }}
+                                            {{ comment.created }}
+                                        </p>
+                                        {{ comment.body|linebreaks }}
                                     </div>
-                                </div>
-                                <form>
-                                    <div class="form-group">
-                                        <label for="message">Your Review *</label>
-                                        <textarea id="message" cols="30" rows="5" class="form-control"></textarea>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="name">Your Name *</label>
-                                        <input type="text" class="form-control" id="name">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="email">Your Email *</label>
-                                        <input type="email" class="form-control" id="email">
-                                    </div>
-                                    <div class="form-group mb-0">
-                                        <input type="submit" value="Leave Your Review" class="btn btn-primary px-3">
-                                    </div>
-                                </form>
+                                {% empty %}
+                                    <p>There are no comments yet.</p>
+                                {% endfor %}
+                                {% if new_comment %}
+                                    <h2>Your comment has been added.</h2>
+                                {% else %}
+                                    <h2>Add a new comment</h2>
+                                    <form action="." method="post">
+                                        {{ comment_form.as_p }}
+                                        {% csrf_token %}
+                                        <p><input type="submit" value="Add comment"></p>
+                                    </form>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
