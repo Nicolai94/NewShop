@@ -6,7 +6,7 @@ from shop.models import Category, Product, Comment
 
 
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ('name', 'email', 'post', 'created', 'active')
+    list_display = ('name', 'email', 'prod', 'created', 'active')
     list_filter = ('active', 'created')
     search_fields = ('name', 'email', 'body')
 
