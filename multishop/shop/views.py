@@ -72,18 +72,8 @@ class ProductByCategory(ListView):
 def product_detail(request, slug):
     product = get_object_or_404(Product, slug=slug, available=True)
     cart_product_form = CartAddProductForm()
-    return render(request, 'shop/detail.html',
-                  {'product': product, 'cart_product_form': cart_product_form})
-
-
-def detail(request, year, month, day, prod):
-    product = get_object_or_404(Product, slug=prod,
-                                   status='published',
-                                   publish__year=year,
-                                   publish__month=month,
-                                   publish__day=day)
     comments = product.comments.filter(active=True)
-
+    comment_form = CommentForm()
     if request.method == 'POST':
         comment_form = CommentForm(data=request.POST)
         if comment_form.is_valid():
@@ -92,11 +82,25 @@ def detail(request, year, month, day, prod):
             new_comment.save()
     else:
         comment_form = CommentForm()
-    return render(request,
-                  'shop/detail.html',
-                 {'product': product,
-                  'comments': comments,
-                  'comment_form': comment_form})
+    return render(request, 'shop/detail.html',
+                  {'product': product, 'cart_product_form': cart_product_form, 'comment_form': comment_form, 'comments': comments})
+
+
+# def detail(request):
+#     if request.method == 'POST':
+#         comment_form = CommentForm(data=request.POST)
+#         if comment_form.is_valid():
+#             new_comment = comment_form.save(commit=False)
+#             new_comment.product = product
+#             new_comment.save()
+#     else:
+#         comment_form = CommentForm()
+#     return render(request,
+#                   'shop/detail.html',
+#                  {'product': product,
+#                   'comments': comments,
+#                   'comment_form': comment_form})
+
 
 def contact(request):
     if request.method == 'POST':
