@@ -73,15 +73,16 @@ def product_detail(request, slug):
     product = get_object_or_404(Product, slug=slug, available=True)
     cart_product_form = CartAddProductForm()
     comments = product.comments.filter(active=True)
-    comment_form = CommentForm()
     if request.method == 'POST':
         comment_form = CommentForm(data=request.POST)
         if comment_form.is_valid():
             new_comment = comment_form.save(commit=False)
             new_comment.product = product
             new_comment.save()
+            messages.add_message(request, messages.SUCCESS, 'Review added')
     else:
         comment_form = CommentForm()
+        messages.add_message(request, messages.WARNING, 'Review not added')
     return render(request, 'shop/detail.html',
                   {'product': product, 'cart_product_form': cart_product_form, 'comment_form': comment_form, 'comments': comments})
 

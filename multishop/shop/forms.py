@@ -11,7 +11,7 @@ class CommentForm(forms.ModelForm):
         widgets = {
             'name': forms.TextInput(attrs={'class': 'col-sm-12'}),
             'email': forms.TextInput(attrs={'class': 'col-sm-12'}),
-            'body': forms.Textarea(attrs={'class': 'form-control'}),
+            'body': forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
         }
         captcha = CaptchaField()
 
