@@ -77,7 +77,10 @@ def product_detail(request, slug):
         comment_form = CommentForm(data=request.POST)
         if comment_form.is_valid():
             new_comment = comment_form.save(commit=False)
-            new_comment.product = product
+            new_comment.prod = product
+            new_comment.name = comment_form.cleaned_data['name']
+            new_comment.email = comment_form.cleaned_data['email']
+            new_comment.body = comment_form.cleaned_data['body']
             new_comment.save()
             messages.add_message(request, messages.SUCCESS, 'Review added')
     else:
@@ -85,22 +88,6 @@ def product_detail(request, slug):
         messages.add_message(request, messages.WARNING, 'Review not added')
     return render(request, 'shop/detail.html',
                   {'product': product, 'cart_product_form': cart_product_form, 'comment_form': comment_form, 'comments': comments})
-
-
-# def detail(request):
-#     if request.method == 'POST':
-#         comment_form = CommentForm(data=request.POST)
-#         if comment_form.is_valid():
-#             new_comment = comment_form.save(commit=False)
-#             new_comment.product = product
-#             new_comment.save()
-#     else:
-#         comment_form = CommentForm()
-#     return render(request,
-#                   'shop/detail.html',
-#                  {'product': product,
-#                   'comments': comments,
-#                   'comment_form': comment_form})
 
 
 def contact(request):

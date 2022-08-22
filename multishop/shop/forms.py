@@ -13,7 +13,6 @@ class CommentForm(forms.ModelForm):
             'email': forms.TextInput(attrs={'class': 'col-sm-12'}),
             'body': forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
         }
-        captcha = CaptchaField()
 
 
 class UserLoginForm(AuthenticationForm):
