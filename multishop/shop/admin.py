@@ -2,7 +2,10 @@ from django import forms
 from django.contrib import admin
 from django.utils.safestring import mark_safe
 from ckeditor_uploader.widgets import CKEditorUploadingWidget
-from shop.models import Category, Product, Comment
+from shop.models import Category, Product, Comment, AdvUser
+
+
+admin.site.register(AdvUser)
 
 
 class CommentAdmin(admin.ModelAdmin):
@@ -49,9 +52,3 @@ class ProductAdmin(admin.ModelAdmin):
         return '-'
 
     get_photo.short_description = 'Миниатюра'
-
-
-# @admin.register(Reviews)
-# class ReviewAdmin(admin.ModelAdmin):
-#     list_display = ('name', 'email', 'parent', 'product', 'id')
-#     readonly_fields = ('name', 'email')

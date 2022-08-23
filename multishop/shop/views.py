@@ -1,44 +1,95 @@
 from django.contrib import messages
 from django.contrib.auth import login, logout
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
+from django.contrib.messages.views import SuccessMessageMixin
 from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, UpdateView, CreateView, TemplateView
 from django.contrib.auth.forms import UserCreationForm
-from .models import Product, Category
+from .models import Product, Category, AdvUser
 from cart.forms import CartAddProductForm
-from .forms import UserLoginForm, ContactForm, CommentForm
+from .forms import ContactForm, CommentForm, ChangeUserInfoForm, RegisterUserForm
 
 
-def user_login(request):
-    if request.method == 'POST':
-        form = UserLoginForm(data=request.POST)
-        if form.is_valid():
-            user = form.get_user()
-            login(request, user)
-            return redirect('home')
-    else:
-        form = UserLoginForm()
-    return render(request, 'shop/login.html', {'form': form})
+@login_required
+def profile(request):
+    return render(request, 'shop/profile.html')
 
 
-def user_logout(request):
-    logout(request)
-    return redirect('login')
+class ShopLoginView(LoginView):
+    template_name = 'shop/login.html'
 
 
-def register(request):
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Your registration success')
-            return redirect('home')
-    else:
-        form = UserCreationForm()
-        messages.error(request, 'Wrong registration')
-    return render(request, 'shop/register.html', {'form': form})
+class ShopLogoutView(LoginRequiredMixin, LogoutView):
+    template_name = 'shop/logout.html'
+
+
+class ShopPasswordChangeView(SuccessMessageMixin, LoginRequiredMixin, PasswordChangeView):
+    template_name = 'shop/password_change.html'
+    success_url = reverse_lazy('shop:profile')
+    success_message = 'Password is changed'
+
+
+class ChangeUserInfoView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
+    model = AdvUser
+    template_name = 'shop/change_user_info.html'
+    form_class = ChangeUserInfoForm
+    success_url = reverse_lazy('shop:profile')
+    success_message = 'Data of user changed'
+
+    def setup(self, request, *args, **kwargs):
+        self.user_id = request.user.pk
+        return super().setup(request, *args, **kwargs)
+
+    def get_object(self, queryset=None):
+        if not queryset:
+            queryset = self.get_queryset()
+        return get_object_or_404(queryset, pk=self.user_id)
+
+
+class RegisterUserView(CreateView):
+    model = AdvUser
+    template_name = 'shop/register.html'
+    form_class = RegisterUserForm
+    success_url = reverse_lazy('shop:register_done')
+
+
+class RegisterDoneView(TemplateView):
+    template_name = 'shop/register_done.html'
+
+# def user_login(request):
+#     if request.method == 'POST':
+#         form = UserLoginForm(data=request.POST)
+#         if form.is_valid():
+#             user = form.get_user()
+#             login(request, user)
+#             return redirect('home')
+#     else:
+#         form = UserLoginForm()
+#     return render(request, 'shop/login.html', {'form': form})
+
+
+# def user_logout(request):
+#     logout(request)
+#     return redirect('login')
+
+
+# def register(request):
+#     if request.method == 'POST':
+#         form = UserCreationForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             messages.success(request, 'Your registration success')
+#             return redirect('home')
+#     else:
+#         form = UserCreationForm()
+#         messages.error(request, 'Wrong registration')
+#     return render(request, 'shop/register.html', {'form': form})
 
 
 class Home(ListView):

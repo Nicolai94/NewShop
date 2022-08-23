@@ -4,10 +4,11 @@ from shop.models import Category
 
 register = template.Library()
 
+
 @register.inclusion_tag('shop/category_tpl.html')
-def show_menu(menu_class='menu'):
+def show_menu(menu_nav='menu'):
     categories = Category.objects.all()
-    return {'categories': categories, 'menu_class': menu_class}
+    return {'categories': categories, 'menu_nav': menu_nav}
 
 
 @register.inclusion_tag('shop/category_main_tpl.html')

@@ -11,7 +11,14 @@
         <div class="col-lg-6 text-center text-lg-right">
             <div class="d-inline-flex align-items-center">
                 {% if user.is_authenticated %}
-                <span>{{ user.username }}</span> | <a href="{% url 'logout' %}">Выход</a>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">My Account</button>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <span class="dropdown-item"><a class="dropdown-item" href="{% url 'profile' %}">Profile {{ user.username }}</a></span>
+                        <span class="dropdown-item"><a class="dropdown-item" href="{% url 'password_change' %}">Change password</a></span>
+                        <span class="dropdown-item"><a class="dropdown-item" href="{% url 'logout' %}">Exit</a></span>
+                    </div>
+                </div>
                 {% else %}
                 <div class="btn-group">
                     <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">My Account</button>

@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load menu %}
+{% block title %}Your Profile {{ user.username }} :: {{ block.super }}{% endblock title %}
+{% block content %}
+{% if user.first_name and user.last_name %}
+<p> Hello, {{ user.first_name }} {{ user.last_name }}</p>
+{% else %}
+<p>Hello</p>
+{% endif %}
+<p> Your check:</p>
+{% endblock content %}
