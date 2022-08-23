@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load menu %}
+{% block title %} Activation done :: {{ block.super }}{% endblock title %}
+{% block content %}
+<h1>Activation</h1>
+<p>User with this name is succssesful activated.</p>
+<p><a href="{% url 'login' %}">Enter</a> </p>
+{% endblock content %}

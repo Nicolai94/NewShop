@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load menu %}
+{% block title %} Bad signature :: {{ block.super }}{% endblock title %}
+{% block content %}
+<h2>Аctivation</h2>
+<p>Activation with this name have bad signature.</p>
+<p><a href="{% url 'shop:register' %}">Try again</a> </p>
+{% endblock %}

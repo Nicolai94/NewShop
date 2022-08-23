@@ -207,3 +207,5 @@ INTERNAL_IPS = [
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 AUTH_USER_MODEL = 'shop.AdvUser'
+
+EMAIL_PORT = 1025

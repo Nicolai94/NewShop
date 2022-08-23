@@ -5,15 +5,17 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.mail import send_mail
+from django.core.signing import BadSignature
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import ListView, DetailView, UpdateView, CreateView, TemplateView
+from django.views.generic import ListView, DetailView, UpdateView, CreateView, TemplateView, DeleteView
 from django.contrib.auth.forms import UserCreationForm
 from .models import Product, Category, AdvUser
 from cart.forms import CartAddProductForm
 from .forms import ContactForm, CommentForm, ChangeUserInfoForm, RegisterUserForm
+from .utilities import signer
 
 
 @login_required
@@ -52,15 +54,50 @@ class ChangeUserInfoView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
         return get_object_or_404(queryset, pk=self.user_id)
 
 
+def user_activate(request, sign):
+    try:
+        username = signer.unsign(sign)
+    except BadSignature:
+        return render(request, 'shop/bad_signature.html')
+    user = get_object_or_404(AdvUser, username=username)
+    if user.is_activated:
+        template = 'shop/user_is_activated.html'
+    else:
+        template = 'shop/activation_done.html'
+        user.is_active = True
+        user.is_activated = True
+        user.save()
+    return render(request, template)
+
+
 class RegisterUserView(CreateView):
     model = AdvUser
     template_name = 'shop/register.html'
     form_class = RegisterUserForm
-    success_url = reverse_lazy('shop:register_done')
+    success_url = reverse_lazy('register_done')
 
 
 class RegisterDoneView(TemplateView):
     template_name = 'shop/register_done.html'
+
+class DeleteUserView(LoginRequiredMixin, DeleteView):
+    model = AdvUser
+    template_name = 'shop/delete_user.html'
+    success_url = reverse_lazy('index')
+
+    def setup(self, request, *args, **kwargs):
+        self.user_id = request.user.pk
+        return super().setup(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        logout(request)
+        messages.add_message(request, messages.SUCCESS, 'User delete')
+        return super().post(request, *args, **kwargs)
+
+    def get_object(self, queryset=None):
+        if not queryset:
+            queryset = self.get_queryset()
+        return get_object_or_404(queryset, pk=self.user_id)
 
 # def user_login(request):
 #     if request.method == 'POST':

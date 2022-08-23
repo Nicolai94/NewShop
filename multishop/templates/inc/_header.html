@@ -16,6 +16,7 @@
                     <div class="dropdown-menu dropdown-menu-right">
                         <span class="dropdown-item"><a class="dropdown-item" href="{% url 'profile' %}">Profile {{ user.username }}</a></span>
                         <span class="dropdown-item"><a class="dropdown-item" href="{% url 'password_change' %}">Change password</a></span>
+                        <span class="dropdown-item"><a class="dropdown-item" href="{% url 'profile_delete' %}">Delete profile</a></span>
                         <span class="dropdown-item"><a class="dropdown-item" href="{% url 'logout' %}">Exit</a></span>
                     </div>
                 </div>
@@ -23,8 +24,8 @@
                 <div class="btn-group">
                     <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">My Account</button>
                     <div class="dropdown-menu dropdown-menu-right">
-                        <span class="dropdown-item"><a class="dropdown-item" href="{% url 'login' %}">Sign in</a></span>
-                        <span class="dropdown-item"><a class="dropdown-item" href="{% url 'register' %}">Sign up</a></span>
+                        <span class="dropdown-item"><a class="dropdown-item" href="{% url 'login' %}">Login</a></span>
+                        <span class="dropdown-item"><a class="dropdown-item" href="{% url 'register' %}">Register</a></span>
                     </div>
                 </div>
                 {% endif %}

@@ -1,8 +1,7 @@
-Уважаемый пользователь {{ user.username }}!
+Dear user {{ user.username }}!
 
-Вы зарегистрировались на сайте "Доска объявлений".
-Вам необходимо выполнить активацию, чтобы подтвердить свою личность.
-Для этого пройдите, пожалуйста, по ссылке
-{{ host }}{% url 'main:register_activate' sign=sign %}
-До свидания!
-С уважением, администрация сайта "Доска объявлений".
+You register in site 'Multishop'.
+You need have activation, approve you identity.
+Go to the
+{{ host }}{% url 'register_activate' sign=sign %}
+Bye!

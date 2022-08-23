@@ -4,7 +4,7 @@ from django.urls import path
 
 from .views import Home, ProductByCategory, contact, Search, ShopList, about, ShopLogoutView, \
     product_detail, ShopLoginView, profile, ChangeUserInfoView, ShopPasswordChangeView, RegisterUserView, \
-    RegisterDoneView
+    RegisterDoneView, user_activate, DeleteUserView
 
 urlpatterns = [
     path('', Home.as_view(), name='home'),
@@ -22,6 +22,8 @@ urlpatterns = [
     path('accounts/password/change/', ShopPasswordChangeView.as_view(), name='password_change'),
     path('accounts/register/', RegisterUserView.as_view(), name='register'),
     path('accounts/register/done/', RegisterDoneView.as_view(), name='register_done'),
+    path('accounts/register/activate/<str:sign>/', user_activate, name='register_activate'),
+    path('accounts/profile/delete/', DeleteUserView.as_view(), name='profile_delete'),
 
 
 ]
