@@ -9,6 +9,7 @@ urlpatterns = [
     path('captcha/', include('captcha.urls')),
     path('orders/', include('orders.urls', namespace='orders')),
     path('cart/', include('cart.urls', namespace='cart')),
+    path('api/', include('api.urls')),
     path('', include('shop.urls')),
 
 ]

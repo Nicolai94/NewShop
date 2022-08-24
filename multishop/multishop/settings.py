@@ -31,6 +31,9 @@ INSTALLED_APPS = [
     'shop.apps.ShopConfig',
     'cart.apps.CartConfig',
     'orders.apps.OrdersConfig',
+    'rest_framework',
+    'corsheaders',
+    'api.apps.ApiConfig',
 
 ]
 
@@ -38,6 +41,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -209,3 +213,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 AUTH_USER_MODEL = 'shop.AdvUser'
 
 EMAIL_PORT = 1025
+
+CORS_ORIGIN_ALLOW_ALL = True
+
+CORS_URL_REGEX = r'^/api/.*$'

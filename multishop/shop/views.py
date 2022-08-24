@@ -99,35 +99,6 @@ class DeleteUserView(LoginRequiredMixin, DeleteView):
             queryset = self.get_queryset()
         return get_object_or_404(queryset, pk=self.user_id)
 
-# def user_login(request):
-#     if request.method == 'POST':
-#         form = UserLoginForm(data=request.POST)
-#         if form.is_valid():
-#             user = form.get_user()
-#             login(request, user)
-#             return redirect('home')
-#     else:
-#         form = UserLoginForm()
-#     return render(request, 'shop/login.html', {'form': form})
-
-
-# def user_logout(request):
-#     logout(request)
-#     return redirect('login')
-
-
-# def register(request):
-#     if request.method == 'POST':
-#         form = UserCreationForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             messages.success(request, 'Your registration success')
-#             return redirect('home')
-#     else:
-#         form = UserCreationForm()
-#         messages.error(request, 'Wrong registration')
-#     return render(request, 'shop/register.html', {'form': form})
-
 
 class Home(ListView):
     model = Product
